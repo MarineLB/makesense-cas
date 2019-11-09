@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     {{tags}}
-    <tagList></tagList>
+    <tagList label="Tags" maxSelected="2" :tags="listFromApi" v-model="selectedTags"></tagList>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import tagList from "./components/tagList";
 
 export default {
@@ -16,13 +16,15 @@ export default {
   },
   data() {
     return {
-      tags: null
-    }
+      listFromApi: null
+    };
   },
-  mounted () {
+  mounted() {
     axios
-      .get('https://api.projects.makesense.org/v1/taxonomies?limit=200&sort=-createdAt&type=legalForm')
-      .then(response => (this.tags = response))
+      .get(
+        "https://api.projects.makesense.org/v1/taxonomies?limit=200&sort=-createdAt&type=legalForm"
+      )
+      .then(response => (this.listFromApi = response.data.data));
   }
 };
 </script>
@@ -32,8 +34,9 @@ export default {
   font-family: "Raleway", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #0C3944;
-  margin-top: 60px;
+  color: #0c3944;
+  max-width: 530px;
+  width: 100%;
+  margin: 60px auto;
 }
 </style>
