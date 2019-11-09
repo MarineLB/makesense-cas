@@ -3,16 +3,19 @@
     <h3>{{ label }}</h3>
     <p>Selectionne {{ maxSelected }} tags dans la liste</p>
     <ul class="tag-list__tags tag-list__tags--selected">
-      <li v-for="tag in tags" :key="tag._id" class="tag-list__tag">
-        <button class="tag-list__tag-button tag-list__tag-button--selected">
-          {{tag.name.fr}}
+      <li v-for="tag in selectedTags" :key="tag._id" class="tag-list__tag">
+        <button
+          @click="removeFromSelected(tag._id)"
+          class="tag-list__tag-button tag-list__tag-button--selected"
+        >
+          {{tag}}
           <span class="tag-list__tag-icon tag-list__tag-icon--remove"></span>
         </button>
       </li>
     </ul>
     <ul class="tag-list__tags tag-list__tags--available">
       <li v-for="tag in tags" :key="tag._id" class="tag-list__tag">
-        <button class="tag-list__tag-button">
+        <button @click="addToSelected(tag._id)" class="tag-list__tag-button">
           {{tag.name.fr}}
           <span class="tag-list__tag-icon tag-list__tag-icon--add"></span>
         </button>
@@ -27,12 +30,26 @@ export default {
   props: {
     label: String,
     maxSelected: Number,
-    tags: Array
+    tags: Array // filter by not selected tags
   },
   data() {
     return {
       selectedTags: []
     };
+  },
+  computed: {
+    availableTags() {
+      // filter tags that are not selected
+    },
+    selectedTagsObject() {}
+  },
+  methods: {
+    addToSelected(id) {
+      this.selectedTags.push(id);
+    },
+    removeFromSelected(id) {
+      this.selectedTags.splice(this.selectedTags.indexOf(id), 1);
+    }
   }
 };
 </script>

@@ -16,7 +16,8 @@ export default {
   },
   data() {
     return {
-      listFromApi: null
+      listFromApi: null,
+      selectedTags: null
     };
   },
   mounted() {
