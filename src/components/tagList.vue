@@ -70,10 +70,10 @@ export default {
       this.selectedTags.splice(this.selectedTags.indexOf(id), 1);
     },
     getTagName(id) {
-      const tag = this.tags.find(tag => {
-        tag._id == id;
-      });
-      console.log(tag, id, this.tags);
+      return this.tags.find(tag => {
+        console.log(tag, tag._id, id);
+        return tag._id == id;
+      }).name.fr;
     }
   }
 };
