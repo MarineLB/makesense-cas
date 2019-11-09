@@ -1,14 +1,14 @@
 <template>
   <div class="tag-list">
     <h3>{{ label }}</h3>
-    <p>Selectionne {{ maxSelected }} tags dans la liste</p>
+    <p>{{message}}</p>
     <ul class="tag-list__tags tag-list__tags--selected">
-      <li v-for="tag in selectedTags" :key="tag._id" class="tag-list__tag">
+      <li v-for="tagId in selectedTags" :key="tagId" class="tag-list__tag">
         <button
-          @click="removeFromSelected(tag._id)"
+          @click="removeFromSelected(tagId)"
           class="tag-list__tag-button tag-list__tag-button--selected"
         >
-          {{tag}}
+          {{getTagName(tagId)}}
           <span class="tag-list__tag-icon tag-list__tag-icon--remove"></span>
         </button>
       </li>
@@ -45,14 +45,35 @@ export default {
             return !this.selectedTags.includes(tag._id);
           })
         : [];
+    },
+    countSelected() {
+      return this.selectedTags.length;
+    },
+    message() {
+      if (this.countSelected === 0) {
+        return `Selectionne ${this.maxSelected} tags dans la liste`;
+      } else if (this.countSelected < this.maxSelected) {
+        return `Selectionne encore ${this.maxSelected -
+          this.countSelected} tags dans la liste`;
+      } else {
+        return `Vous devez enlever un tag sélectionné pour en choisir un autre`;
+      }
     }
   },
   methods: {
     addToSelected(id) {
-      this.selectedTags.push(id);
+      if (this.countSelected < this.maxSelected) {
+        this.selectedTags.push(id);
+      }
     },
     removeFromSelected(id) {
       this.selectedTags.splice(this.selectedTags.indexOf(id), 1);
+    },
+    getTagName(id) {
+      const tag = this.tags.find(tag => {
+        tag._id == id;
+      });
+      console.log(tag, id, this.tags);
     }
   }
 };
