@@ -135,7 +135,7 @@ export default {
     content: "+";
   }
   &--remove:before {
-    content: "-";
+    content: "x";
   }
 }
 </style>
