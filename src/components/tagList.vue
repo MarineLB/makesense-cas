@@ -2,6 +2,11 @@
   <div class="tag-list">
     <h3>{{ label }}</h3>
     <p>{{message}}</p>
+    <select name="lang" v-model="lang">
+      <option value="fr">Francais</option>
+      <option value="en">English</option>
+      <option value="en">Español</option>
+    </select>
     <ul class="tag-list__tags tag-list__tags--selected">
       <li v-for="tagId in selectedTags" :key="tagId" class="tag-list__tag">
         <button
@@ -16,7 +21,7 @@
     <ul class="tag-list__tags tag-list__tags--available">
       <li v-for="tag in availableTags" :key="tag._id" class="tag-list__tag">
         <button @click="addToSelected(tag._id)" class="tag-list__tag-button">
-          {{tag.name.fr}}
+          {{tag.name[lang]}}
           <span class="tag-list__tag-icon tag-list__tag-icon--add"></span>
         </button>
       </li>
@@ -34,7 +39,8 @@ export default {
   },
   data() {
     return {
-      selectedTags: []
+      selectedTags: [],
+      lang: "fr"
     };
   },
   computed: {
@@ -51,12 +57,14 @@ export default {
     },
     message() {
       if (this.countSelected === 0) {
-        return `Selectionne ${this.maxSelected} tags dans la liste`;
+        return `Selectionne ${
+          this.maxSelected
+        } ${this.getTagPlural()} dans la liste`;
       } else if (this.countSelected < this.maxSelected) {
         return `Selectionne encore ${this.maxSelected -
-          this.countSelected} tags dans la liste`;
+          this.countSelected} ${this.getTagPlural()} dans la liste`;
       } else {
-        return `Vous devez enlever un tag sélectionné pour en choisir un autre`;
+        return `Vous devez enlever 1 tag sélectionné pour en choisir un autre`;
       }
     }
   },
@@ -65,15 +73,22 @@ export default {
       if (this.countSelected < this.maxSelected) {
         this.selectedTags.push(id);
       }
+      this.emitValue();
     },
     removeFromSelected(id) {
       this.selectedTags.splice(this.selectedTags.indexOf(id), 1);
+      this.emitValue();
+    },
+    getTagPlural() {
+      return this.maxSelected - this.countSelected === 1 ? "tag" : "tags";
     },
     getTagName(id) {
       return this.tags.find(tag => {
-        console.log(tag, tag._id, id);
         return tag._id == id;
-      }).name.fr;
+      }).name[this.lang];
+    },
+    emitValue() {
+      this.$emit("input", this.selectedTags);
     }
   }
 };

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <tagList label="Tags" maxSelected="2" :tags="listFromApi"></tagList>
+    <tagList label="Tags" maxSelected="2" :tags="listFromApi" v-model="selectedTags"></tagList>
+    output : {{selectedTags}}
   </div>
 </template>
 
