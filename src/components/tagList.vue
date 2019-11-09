@@ -14,7 +14,7 @@
       </li>
     </ul>
     <ul class="tag-list__tags tag-list__tags--available">
-      <li v-for="tag in tags" :key="tag._id" class="tag-list__tag">
+      <li v-for="tag in availableTags" :key="tag._id" class="tag-list__tag">
         <button @click="addToSelected(tag._id)" class="tag-list__tag-button">
           {{tag.name.fr}}
           <span class="tag-list__tag-icon tag-list__tag-icon--add"></span>
@@ -26,10 +26,10 @@
 
 <script>
 export default {
-  name: "TagList",
+  name: "tagList",
   props: {
     label: String,
-    maxSelected: Number,
+    maxSelected: String,
     tags: Array // filter by not selected tags
   },
   data() {
@@ -40,8 +40,12 @@ export default {
   computed: {
     availableTags() {
       // filter tags that are not selected
-    },
-    selectedTagsObject() {}
+      return this.tags
+        ? this.tags.filter(tag => {
+            return !this.selectedTags.includes(tag._id);
+          })
+        : [];
+    }
   },
   methods: {
     addToSelected(id) {
